@@ -1,4 +1,5 @@
 import java.util.*;
+import java.io.*;
 
 public class Main {
    public static void main(String[] args) {
@@ -10,20 +11,57 @@ public class Main {
       String mainMenuChoice = in.nextLine();
       switch (mainMenuChoice) {
          case "1":
-            System.out.print("Enter title: ");
-            String newArticleTitle = in.nextLine();
-            System.out.print("Enter url (i.e. hello.html): ");
-            String newArticleUrl = in.nextLine();
-            System.out.print("Enter img (i.e. chicago.jpg): ");
-            String newArticleImg = in.nextLine();
-            System.out.print("Enter og_img (i.e. opengraph_logo.png): ");
-            String newArticleOgImg = in.nextLine();
+            System.out.print("Enter number of pages: ");
+            int numberOfPages = Integer.parseInt(in.nextLine());
             System.out.print("Enter date (i.e. 02/03/2020): ");
-            String newArticleDate = in.nextLine();
-            System.out.print("Enter description for OG meta tag: ");
-            String newArticleDescription = in.nextLine();
-            System.out.println("Enter body (use <p></p> tags for all text, no linebreaks): ");
-            String newArticleBody = in.nextLine();
+            String newArticleDate = in.nextLine();               
+            try {
+               File countFile = new File("data/count.txt");
+               Scanner countScanner = new Scanner(countFile);
+               int count = Integer.parseInt(countScanner.nextLine());
+               System.out.println("Count: " + count);
+               count += 1;
+               countScanner.close();
+               File countFileWriter = new File("data/count.txt"); 
+               PrintWriter countWriter = new PrintWriter(countFileWriter);
+               countWriter.print(count);
+               countWriter.close();
+               for (int i = 1; i <= numberOfPages; i++) {
+                  //getting user input and then writing it to XML files
+                  File xmlFile = new File ("data/article_" + count + "_page_" + i + ".xml");
+                  PrintWriter out = new PrintWriter(xmlFile);
+                  System.out.println("Page " + i);
+                  out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+                  out.println("<article>");
+                  out.println("<number_of_pages>" + numberOfPages + "</number_of_pages>");
+                  out.println("<date>" + newArticleDate + "</date>");
+                  System.out.print("Enter title: ");
+                  String newArticleTitle = in.nextLine();
+                  out.println("<title_" + i + ">" + newArticleTitle + "</title_" + i + ">");
+                  System.out.print("Enter url (i.e. hello.html or hello_2.html): ");
+                  String newArticleUrl = in.nextLine();
+                  out.println("<url_" + i + ">" + newArticleUrl + "</url_" + i + ">");
+                  System.out.print("Enter img (i.e. chicago.jpg): ");
+                  String newArticleImg = in.nextLine();
+                  out.println("<img_" + i + ">" + newArticleImg + "</img_" + i + ">");
+                  System.out.print("Enter og_img (i.e. opengraph_logo.png): ");
+                  String newArticleOgImg = in.nextLine();
+                  out.println("<og_img_" + i + ">" + newArticleOgImg + "</og_img_" + i + ">");
+                  System.out.print("Enter description for OG meta tag: ");
+                  String newArticleDescription = in.nextLine();
+                  out.println("<description_" + i + ">" + newArticleDescription + "</description_" + i + ">");
+                  System.out.println("Enter body (use <p></p> tags for all text, no linebreaks): ");
+                  String newArticleBody = in.nextLine();
+                  newArticleBody = newArticleBody.replaceAll("<", "&lt;");
+                  newArticleBody = newArticleBody.replaceAll(">", "&gt;");
+                  out.println("<body_" + i + ">" + newArticleBody + "</body_" + i + ">");
+                  out.println("</article>");
+                  out.close();
+               }
+            } catch (FileNotFoundException e) {
+               e.printStackTrace();
+            }               
+            
             //convert the strings into a single string
             //that will be eventually written to the XML file
             //read count.txt to see how many XML articles there are

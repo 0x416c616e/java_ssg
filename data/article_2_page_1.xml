@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<article>
+   <number_of_pages>1</number_of_pages>
+   <date>03/05/2020</date>
+   <title_1>My 2nd article</title_1>
+   <url_1>cool_blog_post.html</url_1>
+   <img_1>laptop1.jpg</img_1>
+   <og_img_1>laptop1.jpg</og_img_1>
+   <description_1>Here is a description of the page.</description_1>
+   <body_1>&lt;p&gt;This is an example article for the sake of coding.&lt;/p&gt;
+   &gtp&lt;I am making a program that parses XML, among other things. So I need fake XML data.&gt;/p&lt;
+   &gtp&lt;Here is another paragraph.&gt;/p&lt;</body_1>
+</article>
