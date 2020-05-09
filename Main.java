@@ -4,6 +4,16 @@ import java.nio.file.Files;
 import static java.nio.file.StandardCopyOption.*;
 import java.nio.file.Paths;
 import java.nio.file.Path;
+//XML parsing stuff
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;  
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
 
 public class Main {
    public static void main(String[] args) {
@@ -30,6 +40,17 @@ public class Main {
                PrintWriter countWriter = new PrintWriter(countFileWriter);
                countWriter.print(count);
                countWriter.close();
+               //update total number of pages, because some articles might have more than one
+               File totalFile = new File("data/total_number_of_pages.txt");
+               Scanner totalScanner = new Scanner(totalFile);
+               int total = Integer.parseInt(totalScanner.nextLine());
+               System.out.println("Total: " + total);
+               total += numberOfPages;
+               totalScanner.close();
+               File totalFileWriter = new File("data/total_number_of_pages.txt"); 
+               PrintWriter totalWriter = new PrintWriter(totalFileWriter);
+               totalWriter.print(total);
+               totalWriter.close();
                for (int i = 1; i <= numberOfPages; i++) {
                   //getting user input and then writing it to XML files
                   File xmlFile = new File ("data/article_" + count + "_page_" + i + ".xml");
@@ -75,14 +96,71 @@ public class Main {
                System.out.println("Count: " + count);
                //2. copy blog_page_list_template.html to output folder
                Path sourcePageListTemplate = Paths.get("templates/blog_page_list_template.html");
-               Path destinationPageList = Paths.get("output/blog.html");
+               Path destinationPageList = Paths.get("output/blog_temp.html");
                try {               
                   Files.copy(sourcePageListTemplate, destinationPageList, REPLACE_EXISTING);
-                  //3. copy as many blog_post_template.html files as needed (i.e. count == 2, copy twice)
-                  //    example filenames: blog_temp.html and article_1_temp.html, article_2_temp.html, etc.
+                  //2.5 get total number of pages from total_number_of_pages.txt
+                  File totalFile = new File("data/total_number_of_pages.txt");
+                  Scanner totalScanner = new Scanner(totalFile);
+                  int total = Integer.parseInt(totalScanner.nextLine());
+                  System.out.println("Total: " + total);
+                  //3. copy as many blog_post_template.html files as needed (i.e. total == 2, copy twice)
+                  //    example filenames: blog_temp.html and temp_article_page_1.html, temp_article_page_2.html
+                  
+                  Path sourceBlogPostPage = Paths.get("templates/blog_post_template.html");
+                  for (int i = 1; i <= total; i++) {
+                     String destinationString1 = "output/temp_article_page_" + i + ".html";
+                     Path destinationBlogPostPage = Paths.get(destinationString1);
+                     Files.copy(sourceBlogPostPage, destinationBlogPostPage, REPLACE_EXISTING);
+                  }
+                  //3.5 testing XML parsing so I know what to do later
+                  File xmlTest = new File("data/article_1_page_1.xml");
+                  DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                  try {
+                     DocumentBuilder builder = factory.newDocumentBuilder();
+                     try {
+                        Document document = builder.parse(xmlTest);
+                        NodeList nodeList = document.getDocumentElement().getChildNodes();
+                        Node node = nodeList.item(0);
+                        String testDate = node.getAttributes().getNamedItem("date").getNodeValue();
+                        System.out.println(testDate);
+                     } catch (SAXException e) {
+                        e.printStackTrace();
+                     }
+                  } catch (ParserConfigurationException e) {
+                     e.printStackTrace();
+                  }
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  
                   //4. open data files
+                  
+                  /*int currentlyCompletedPages = 0;
+                    int currentlyCompletedArticles = 0;
+                  while (currentlyCompletedPages < total) {
+                     //a.) get number_of_pages from article (currentlyCompletedArticles + 1)
+                     //b.) while (int i = 1; i <= number_of_pages, i++) {
+                     //        take article_[currentlyCompletedArticles] XML page [i]
+                     //        and put into temp_article_page_[currentlyCompletedPages + 1]
+                               then rename it to the proper name from the url
+                     //        currentlyCompletedPages++
+                          }
+                          currentlyCompletedArticles++
+                  }*/
+                  
                   //5. find and replace titles in the blog_temp.html file (list of titles with links)
                   //6. find and replace all blog values in each article_X.html file
+                  //6.5 for articles which have multiple pages, they need to link to one another
+                  //6.6 TO-DO: bootstrap pagination thing at the bottom
                   //7. rename files appropriately, i.e. if article_1.xml has <url> of hello, then rename
                   //   article_1_temp.html to hello.html
                   //8. move files to the github.io folder

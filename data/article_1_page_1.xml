@@ -7,6 +7,6 @@
    <img_1>chicago.png</img_1>
    <og_img_1>opengraph_logo.png</og_img_1>
    <description_1>The first example XML article!</description_1>
-   <body_1>&lt;p&gt;Here is some text. Here is some more text. This is even more text.&lt;/p&gt;
-   &gtp&lt;Here is a second paragraph within the body text.&gt;/p&lt;</body_1>
+   <body_1>&amplt;p&ampgt;Here is some text. Here is some more text. This is even more text.&amplt;/p&ampgt;
+   &ampgtp&amplt;Here is a second paragraph within the body text.&ampgt;/p&amplt;</body_1>
 </article>
