@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<article>
+   <title>Hello, world!</title>
+   <url>my_first_example_page.html</url>
+   <img>chicago.png</img>
+   <og_img>opengraph_logo.png</og_img>
+   <date>01/02/2020</date>
+   <description>The first example XML article!</description>
+   <body>&lt;p&gt;Here is some text. Here is some more text. This is even more text.&lt;/p&gt;
+   &gtp&lt;Here is a second paragraph within the body text.&gt;/p&lt;</body>
+</article>
