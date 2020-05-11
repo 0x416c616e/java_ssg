@@ -82,6 +82,7 @@ public class Main {
                   out.println("<body_" + i + ">" + newArticleBody + "</body_" + i + ">");
                   out.println("</article>");
                   out.close();
+                  System.out.println("successfully made new article");
                }
             } catch (FileNotFoundException e) {
                e.printStackTrace();
